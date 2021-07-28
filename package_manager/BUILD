@@ -8,7 +8,7 @@ par_binary(
     ],
     compiler_args = [
         "--interpreter",
-        "/usr/bin/env python",
+        "/usr/bin/env python3",
     ],
     main = "dpkg_parser.py",
     deps = [
