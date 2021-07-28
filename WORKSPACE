@@ -28,6 +28,15 @@ load(
     "SHA256s",
     "VERSIONS",
 )
+load(
+    "//:php-checksums.bzl",
+    "PHP_DISTRO_ARCHITECTURES",
+    "PHP_DISTRO_BASE_ARCHITECTURES",
+    "PHP_DISTRO_DEBIAN_SECURITY_SNAPSHOT",
+    "PHP_DISTRO_DEBIAN_SNAPSHOT",
+    "PHP_DISTRO_SHA256s",
+    "PHP_DISTRO_VERSIONS",
+)
 
 [
     dpkg_src(
@@ -57,6 +66,20 @@ load(
 
 [
     dpkg_src(
+        name = arch + "_" + name + "_sury-php",
+        arch = arch,
+        distro = distro,
+        package_prefix = "https://packages.sury.org/php/",
+        packages_gz_url = "https://packages.sury.org/php/dists/{}/main/binary-{}/Packages.gz".format(distro, arch),
+
+        sha256 = PHP_DISTRO_SHA256s[arch][name]["sury-php"],
+    )
+    for arch in PHP_DISTRO_ARCHITECTURES
+    for (name, distro) in PHP_DISTRO_VERSIONS
+]
+
+[
+    dpkg_src(
         name = arch + "_" + name + "_security",
         package_prefix = "https://snapshot.debian.org/archive/debian-security/{}/".format(DEBIAN_SECURITY_SNAPSHOT),
         packages_gz_url = "https://snapshot.debian.org/archive/debian-security/{}/dists/{}/updates/main/binary-{}/Packages.gz".format(DEBIAN_SECURITY_SNAPSHOT, distro, arch),
@@ -79,6 +102,69 @@ load(
     for arch in ARCHITECTURES
     for (name, distro) in VERSIONS
     if "backports" in SHA256s[arch][name]
+]
+
+[
+    dpkg_list(
+        name = "php_package_bundle_" + arch + "_debian10",
+        packages = [
+            #php, php-fpm
+            "libmagic1",
+            "libmagic-mgc",
+            "mime-support",
+            "libsystemd0",
+            "libgcrypt20",
+            "libgpg-error0",
+            "liblz4-1",
+            "libacl1",
+            "libattr1",
+            "libapparmor1",
+            "libpcre2-8-0",
+            "libncurses6", #cli
+            "libtinfo6", #cli
+            "libedit2", #cli
+            "libbsd0",
+            "libargon2-1", #argon
+            "libcurl4", #curl
+            "libcom-err2",
+            "libonig5", #mbstring
+            "libsodium23", #sodium
+            "libsqlite3-0", #sqlite
+            "libssl1.1", #ssl
+            "libxml2", #xml
+            "liblzma5", #xml
+            "libxslt1.1", #xml
+            "zlib1g", #zlib
+            "libzip4", #zip
+            "libmcrypt4", #mcrypt
+            "libgd3", #gd
+            "libfontconfig1", #gd
+            "libfreetype6", #gd
+            "libjpeg62-turbo", #gd
+            "libpng16-16", #gd
+            "libtiff5", #gd
+            "libwebp6", #gd
+            "libxpm4", #gd
+            "libexpat1", #gd
+            "libuuid1", #gd
+            "libx11-6", #gd
+            "libxcb1", #gd
+            "libx11-data", #gd
+            "libzstd1", #gd
+            "libjbig0", #gd
+            "libxau6", #gd
+            "libxdmcp6", #gd
+            "libicu65", #intl
+            "ucf",
+        ],
+        sources = [
+            "@" + arch + "_debian10_sury-php//file:Packages.json",
+            "@" + arch + "_debian10_security//file:Packages.json",
+            "@" + arch + "_debian10_updates//file:Packages.json",
+            "@" + arch + "_debian10//file:Packages.json",
+        ],
+    )
+    for arch in ARCHITECTURES
 ]
 
 [
