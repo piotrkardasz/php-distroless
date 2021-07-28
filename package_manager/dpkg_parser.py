@@ -129,7 +129,7 @@ def download_dpkg(package_files, packages, workspace_name, versionsfile):
 
 def download_and_save(url, out_file):
     try:
-        subprocess.check_output(["wget", "--tries", "10", url, "-O", out_file], stderr=subprocess.STDOUT)
+        subprocess.check_output(["wget", "-U", 'Aptly/1.0', "--tries", "10", url, "-O", out_file], stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
         print("error running wget: %s", e.output)
         raise
