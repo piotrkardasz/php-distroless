@@ -1,0 +1,75 @@
+schemaVersion: "1.0.0"
+fileExistenceTests:
+  - name: php-fpm
+    path: '/usr/sbin/php-fpm'
+    shouldExist: true
+commandTests:
+  - name: fpm-version
+    command: [ "/usr/sbin/php-fpm", "--version" ]
+    expectedOutput: ["PHP 8.0"]
+  - name: version
+    command: ["/usr/bin/php", "--version"]
+    expectedOutput: ["PHP 8.0"]
+  - name: config-files
+    command: [ "/usr/bin/php", "--ini" ]
+    expectedOutput:
+      - '/etc/php/8.0/cli/conf.d/10-mysqlnd.ini,'
+      - '/etc/php/8.0/cli/conf.d/10-opcache.ini,'
+      - '/etc/php/8.0/cli/conf.d/10-pdo.ini,'
+      - '/etc/php/8.0/cli/conf.d/10-pdo_mysql.ini,'
+      - '/etc/php/8.0/cli/conf.d/15-xml.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-calendar.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-ctype.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-dom.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-exif.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-fileinfo.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-ftp.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-gd.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-gettext.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-iconv.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-mbstring.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-phar.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-posix.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-readline.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-shmop.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-simplexml.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-sockets.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-sysvmsg.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-sysvsem.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-sysvshm.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-tokenizer.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-xmlreader.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-xmlwriter.ini,'
+      - '/etc/php/8.0/cli/conf.d/20-xsl.ini'
+  - name: extensions
+    command: ["/usr/bin/php", "-m"]
+    expectedOutput:
+      - 'calendar'
+      - 'ctype'
+      - 'dom'
+      - 'exif'
+      - 'fileinfo'
+      - 'ftp'
+      - 'gd'
+      - 'gettext'
+      - 'iconv'
+      - 'json'
+      - 'mbstring'
+      - 'mysqlnd'
+      - 'Zend OPcache'
+      - 'pdo_mysql'
+      - 'pdo'
+      - 'Phar'
+      - 'posix'
+      - 'readline'
+      - 'shmop'
+      - 'SimpleXML'
+      - 'sockets'
+      - 'sysvmsg'
+      - 'sysvsem'
+      - 'sysvshm'
+      - 'tokenizer'
+      - 'xml'
+      - 'xmlreader'
+      - 'xmlwriter'
+      - 'xsl'
