@@ -88,7 +88,6 @@ load(
         distro = distro,
         package_prefix = "https://packages.sury.org/php/",
         packages_gz_url = "https://packages.sury.org/php/dists/{}/main/binary-{}/Packages.gz".format(distro, arch),
-
         sha256 = PHP_DISTRO_SHA256s[arch][name]["sury-php"],
     )
     for arch in PHP_DISTRO_ARCHITECTURES
@@ -152,41 +151,41 @@ load(
             "libattr1",
             "libapparmor1",
             "libpcre2-8-0",
-            "libncurses6", #cli
-            "libtinfo6", #cli
-            "libedit2", #cli
+            "libncurses6",  #cli
+            "libtinfo6",  #cli
+            "libedit2",  #cli
             "libbsd0",
-            "libargon2-1", #argon
-            "libcurl4", #curl
+            "libargon2-1",  #argon
+            "libcurl4",  #curl
             "libcom-err2",
-            "libonig5", #mbstring
-            "libsodium23", #sodium
-            "libsqlite3-0", #sqlite
-            "libssl1.1", #ssl
-            "libxml2", #xml
-            "liblzma5", #xml
-            "libxslt1.1", #xml
-            "zlib1g", #zlib
-            "libzip4", #zip
-            "libmcrypt4", #mcrypt
-            "libgd3", #gd
-            "libfontconfig1", #gd
-            "libfreetype6", #gd
-            "libjpeg62-turbo", #gd
-            "libpng16-16", #gd
-            "libtiff5", #gd
-            "libwebp6", #gd
-            "libxpm4", #gd
-            "libexpat1", #gd
-            "libuuid1", #gd
-            "libx11-6", #gd
-            "libxcb1", #gd
-            "libx11-data", #gd
-            "libzstd1", #gd
-            "libjbig0", #gd
-            "libxau6", #gd
-            "libxdmcp6", #gd
-            "libicu65", #intl
+            "libonig5",  #mbstring
+            "libsodium23",  #sodium
+            "libsqlite3-0",  #sqlite
+            "libssl1.1",  #ssl
+            "libxml2",  #xml
+            "liblzma5",  #xml
+            "libxslt1.1",  #xml
+            "zlib1g",  #zlib
+            "libzip4",  #zip
+            "libmcrypt4",  #mcrypt
+            "libgd3",  #gd
+            "libfontconfig1",  #gd
+            "libfreetype6",  #gd
+            "libjpeg62-turbo",  #gd
+            "libpng16-16",  #gd
+            "libtiff5",  #gd
+            "libwebp6",  #gd
+            "libxpm4",  #gd
+            "libexpat1",  #gd
+            "libuuid1",  #gd
+            "libx11-6",  #gd
+            "libxcb1",  #gd
+            "libx11-data",  #gd
+            "libzstd1",  #gd
+            "libjbig0",  #gd
+            "libxau6",  #gd
+            "libxdmcp6",  #gd
+            "libicu65",  #intl
             "ucf",
         ],
         sources = [
@@ -269,6 +268,47 @@ load(
             "@" + arch + "_debian11_security//file:Packages.json",
             "@" + arch + "_debian11_updates//file:Packages.json",
             "@" + arch + "_debian11//file:Packages.json",
+        ],
+    )
+    for arch in ARCHITECTURES
+]
+
+[
+    dpkg_list(
+        name = "php8_bundle_" + arch + "_debian10",
+        packages = [
+            "php8.0",
+            "php8.0-cli",
+            "php8.0-common",
+            "php8.0-curl",
+            "php8.0-dev",
+            "php8.0-fpm",
+            "php8.0-gd",
+            "php8.0-intl",
+            "php8.0-mbstring",
+            "php8.0-mcrypt",
+            "php8.0-mysql",
+            "php8.0-opcache",
+            "php8.0-readline",
+            "php8.0-xml",
+            "php8.0-zip",
+        ],
+        sources = [
+            "@" + arch + "_debian10_sury-php//file:Packages.json",
+        ],
+    )
+    for arch in ARCHITECTURES
+]
+
+[
+    dpkg_list(
+        name = "php8plus_bundle_" + arch + "_debian10",
+        packages = [
+            "php8.0-igbinary",
+            "php8.0-redis",
+        ],
+        sources = [
+            "@" + arch + "_debian10_sury-php//file:Packages.json",
         ],
     )
     for arch in ARCHITECTURES
