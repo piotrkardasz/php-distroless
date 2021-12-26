@@ -17,25 +17,25 @@ PHP_DISTRO_VERSIONS = [
     ("debian10", "buster"),
 ]
 
-PHP_DISTRO_DEBIAN_SNAPSHOT = "20210729T144530Z"
+PHP_DISTRO_DEBIAN_SNAPSHOT = "20211226T204637Z"
 
-PHP_DISTRO_DEBIAN_SECURITY_SNAPSHOT = "20210729T023407Z"
+PHP_DISTRO_DEBIAN_SECURITY_SNAPSHOT = "20211227T030445Z"
 
 PHP_DISTRO_SHA256s = {
     "amd64": {
         "debian10": {
-            "main": "afe7cb263af91703af8d75e9c6ca7142811e930440e5767e3e4b51cdf852056b",
-            "updates": "e2998294f7ddef7e2ab3c1da87bba50da7f03927351d1807c272112db411661e",
-            "security": "cc35a3d27b6bb1c9d9a37b95d37e3aecee61d74b523e7179ced1742a43859b9a",
-            "sury-php": "a1e100c64ac96c2ea6002a4d6696a6eef3fc3ae7609894123a951b147d3da7c5",
+            "main": "5865abfef15e9be4113532c953f522e9f7679b4a282d43d1a943d51abb17ece1",
+            "updates": "97090fbf12a9aa3858d740eac12840777c232ec917985828b5d1d38239e92cdb",
+            "security": "053c4046d90c52606c72fc1c5c87368bf9b47746355c72c6406e31d6a5463c88",
+            "sury-php": "23d793d61b66d64b3535bfc9a82941df6c8415a211a7d13cc7c025ffdcc773ff",
         },
     },
     "arm64": {
         "debian10": {
-            "main": "1a20b91043ffb175d4fdf00790c5a960773a8d96bf9be4817362bf0ed10a969b",
-            "updates": "2ae1361d634e401fe6b2edb08f0f5b62f77360a8768c99adf41f5833d18b04f7",
-            "security": "ba1ce3778b3c701e6d4480b6b20a09bdc41fd64a173f4b230c9084ab1d5b90ad",
-            "sury-php": "c5a4691a9c767b95d409ac3576f2df7473b5ee43815fb4404e673b08099098b8",
+            "main": "a850aaac1a83c41608ee2ef9451c90fe485ff3afb3374018af792aed8678de2a",
+            "updates": "f4086dc7ce3cd5150eb051ed4617f6c6ee23915b9b07092deeaff98065f6157f",
+            "security": "a78d2e663f0653af229b5c1b518ad636b704ca7da6ed86c21f2d39b55bb7eb66",
+            "sury-php": "7e7263dc1ddce0b4939454d7cc9c02735def4ac0ec384056b62a2bf559a3fa37",
         },
     },
 }

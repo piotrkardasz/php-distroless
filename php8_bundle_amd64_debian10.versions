@@ -1,0 +1,17 @@
+{
+    "php8.0": "8.0.14-1+0~20211220.28+debian10~1.gbpad68c7",
+    "php8.0-cli": "8.0.14-1+0~20211220.28+debian10~1.gbpad68c7",
+    "php8.0-common": "8.0.14-1+0~20211220.28+debian10~1.gbpad68c7",
+    "php8.0-curl": "8.0.14-1+0~20211220.28+debian10~1.gbpad68c7",
+    "php8.0-dev": "8.0.14-1+0~20211220.28+debian10~1.gbpad68c7",
+    "php8.0-fpm": "8.0.14-1+0~20211220.28+debian10~1.gbpad68c7",
+    "php8.0-gd": "8.0.14-1+0~20211220.28+debian10~1.gbpad68c7",
+    "php8.0-intl": "8.0.14-1+0~20211220.28+debian10~1.gbpad68c7",
+    "php8.0-mbstring": "8.0.14-1+0~20211220.28+debian10~1.gbpad68c7",
+    "php8.0-mcrypt": "3:1.0.4-7+0~20211118.7+debian10~1.gbp26dfce",
+    "php8.0-mysql": "8.0.14-1+0~20211220.28+debian10~1.gbpad68c7",
+    "php8.0-opcache": "8.0.14-1+0~20211220.28+debian10~1.gbpad68c7",
+    "php8.0-readline": "8.0.14-1+0~20211220.28+debian10~1.gbpad68c7",
+    "php8.0-xml": "8.0.14-1+0~20211220.28+debian10~1.gbpad68c7",
+    "php8.0-zip": "8.0.14-1+0~20211220.28+debian10~1.gbpad68c7"
+}
