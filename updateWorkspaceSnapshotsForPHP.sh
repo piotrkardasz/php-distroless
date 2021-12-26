@@ -6,6 +6,7 @@ set -o xtrace
 cp php-checksums.bzl php-checksums.bzl~
 cp php_package_bundle_amd64_debian10.versions php_package_bundle_amd64_debian10.versions~
 cp php_package_bundle_arm64_debian10.versions php_package_bundle_arm64_debian10.versions~
+cp php8_bundle_amd64_debian10.versions pphp8_bundle_amd64_debian10.versions~
 
 YEAR=`date +"%Y"`
 MONTH=`date +"%m"`
@@ -76,6 +77,8 @@ bazel clean
 bazel build //package_manager:dpkg_parser.par
 bazel build @php_package_bundle_amd64_debian10//file:packages.bzl
 bazel build @php_package_bundle_arm64_debian10//file:packages.bzl
+bazel build @php8_bundle_amd64_debian10//file:packages.bzl
+
 
 # Check if any of the version lock files are updated
 

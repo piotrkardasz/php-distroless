@@ -169,6 +169,32 @@ load(
 
 [
     dpkg_list(
+        name = "php8_bundle_" + arch + "_debian10",
+        packages = [
+            "php8.0",
+            "php8.0-common",
+            "php8.0-opcache",
+            "php8.0-mcrypt",
+            "php8.0-cli",
+            "php8.0-fpm",
+            "php8.0-readline",
+            "php8.0-gd",
+            "php8.0-curl",
+            "php8.0-mysql",
+            "php8.0-zip",
+            "php8.0-intl",
+            "php8.0-mbstring",
+            "php8.0-xml",
+        ],
+        sources = [
+            "@" + arch + "_debian10_sury-php//file:Packages.json",
+        ],
+    )
+    for arch in ARCHITECTURES
+]
+
+[
+    dpkg_list(
         name = "package_bundle_" + arch + "_debian10",
         packages = [
             "libc6",

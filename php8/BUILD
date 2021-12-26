@@ -1,8 +1,8 @@
 package(default_visibility = ["//visibility:public"])
 
-load("//base:distro.bzl", "DISTRO_PACKAGES", "DISTRO_SUFFIXES")
+load("//base:distro.bzl", "DISTRO_SUFFIXES")
 load(":php_paths.bzl", "PHP_EXT", "PHP_LINKS")
-load("@package_bundle_amd64_debian10//file:packages.bzl", "packages")
+load("@php8_bundle_amd64_debian10//file:packages.bzl", "packages")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image", "container_layer")
 load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
 load("//:checksums.bzl", "ARCHITECTURES")
@@ -11,6 +11,7 @@ load("@io_bazel_rules_docker//contrib:passwd.bzl", "passwd_entry", "passwd_file"
 load("@io_bazel_rules_docker//contrib:group.bzl", "group_entry", "group_file")
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 load(":php-extensions.bzl", "php_extensions")
+load("//cc_php:extract_dependencies.bzl", "extract_dependencies")
 
 PHP_VERSION = "8.0"
 
@@ -91,23 +92,7 @@ pkg_tar(
         name = ("php8" if (not mode) else mode[1:]) + "_" + user + "_" + arch + distro_suffix,
         architecture = arch,
         base = "//cc_php" + (mode if mode else ":cc_php") + "_" + user + "_" + arch + distro_suffix,
-        debs = [
-            packages["liblz4-1"],
-            packages["php8.0"],
-            packages["php8.0-common"],
-            packages["php8.0-opcache"],
-            packages["php8.0-mcrypt"],
-            packages["php8.0-cli"],
-            packages["php8.0-fpm"],
-            packages["php8.0-readline"],
-            packages["php8.0-gd"],
-            packages["php8.0-curl"],
-            packages["php8.0-mysql"],
-            packages["php8.0-zip"],
-            packages["php8.0-intl"],
-            packages["php8.0-mbstring"],
-            packages["php8.0-xml"],
-        ],
+        debs = extract_dependencies(packages),
         entrypoint = [
             "/usr/sbin/php-fpm",
             "-F",
