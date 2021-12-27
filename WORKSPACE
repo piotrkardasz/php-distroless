@@ -304,8 +304,10 @@ load(
     dpkg_list(
         name = "php8plus_bundle_" + arch + "_debian10",
         packages = [
+            "php8.0-apcu",
             "php8.0-igbinary",
             "php8.0-redis",
+            "php8.0-xdebug",
         ],
         sources = [
             "@" + arch + "_debian10_sury-php//file:Packages.json",
