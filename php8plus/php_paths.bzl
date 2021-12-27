@@ -1,5 +1,5 @@
 # Dictionary that contains all the enabled extensions, their priorities and source paths
-PHP_VERSION = "8.0"
+PHP_VERSION = "7.4"
 
 PHP_EXT = {
     "igbinary": {

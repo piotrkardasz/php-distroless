@@ -12,7 +12,7 @@ load("//:checksums.bzl", "ARCHITECTURES")
 load(":php_paths.bzl", "PHP_EXT", "PHP_LINKS")
 load(":php-extensions.bzl", "php_extensions")
 
-PHP_VERSION = "8.0"
+PHP_VERSION = "7.4"
 
 # www-data user UID
 WWW_DATA = 33

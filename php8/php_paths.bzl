@@ -1,5 +1,5 @@
 # Dictionary that contains all the enabled extensions, their priorities and source paths
-PHP_VERSION = "8.0"
+PHP_VERSION = "7.4"
 
 PHP_EXT = {
     "calendar": {
@@ -9,6 +9,10 @@ PHP_EXT = {
     "ctype": {
         "prio": "20",
         "path": "/usr/share/php" + PHP_VERSION + "-common/common/ctype.ini",
+    },
+    "curl": {
+        "prio": "20",
+        "path": "/usr/share/php" + PHP_VERSION + "-curl/curl/curl.ini",
     },
     "dom": {
         "prio": "20",
@@ -38,6 +42,10 @@ PHP_EXT = {
         "prio": "20",
         "path": "/usr/share/php" + PHP_VERSION + "-common/common/iconv.ini",
     },
+    "intl": {
+            "prio": "20",
+            "path": "/usr/share/php" + PHP_VERSION + "-intl/intl/intl.ini",
+        },
     "json": {
         "prio": "20",
         "path": "/usr/share/php" + PHP_VERSION + "-json/json/json.ini",

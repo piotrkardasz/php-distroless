@@ -1,6 +1,10 @@
-def extract_dependencies(packages):
+def extract_dependencies(packages, excludedDeps = []):
     deps = []
 
     for (package) in packages:
-        deps.append(packages[package])
+        if package in excludedDeps:
+            print("Excluded: {} package\n".format(package))
+            continue
+        else:
+            deps.append(packages[package])
     return deps

@@ -7,12 +7,16 @@ load("//:php-checksums.bzl", "PHP_DISTRO_ARCHITECTURES")
 load(":extract_dependencies.bzl", "extract_dependencies")
 
 # An core image for PHP builds
+
+EXCLUDED_DEBS = [
+]
+
 [
     container_image(
         name = ("cc_php" if (not mode) else mode[1:]) + "_" + user + "_" + arch + distro_suffix,
         architecture = arch,
         base = "//cc" + (mode if mode else ":cc") + "_" + user + "_" + arch + distro_suffix,
-        debs = extract_dependencies(packages),
+        debs = extract_dependencies(packages, EXCLUDED_DEBS),
     )
     for mode in [
         "",
