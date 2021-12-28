@@ -157,6 +157,26 @@ load(
             "libbsd0",
             "libargon2-1",  #argon
             "libcurl4",  #curl
+            "libffi6",  #curl
+            "libnghttp2-14",  #curl
+            "libidn2-0",  #curl
+            "libpsl5",  #curl
+            "libldap-2.4-2",  #curl
+            "librtmp1",  #curl
+            "libssh2-1",  #curl
+            "libk5crypto3",  #curl
+            "libkrb5-3",  #curl
+            "libunistring2",  #curl
+            "libgssapi-krb5-2",  #curl
+            "libkeyutils1",  #curl
+            "libkrb5support0",  #curl
+            "libgnutls30",  #curl
+            "libgmp10",  #curl
+            "libhogweed4",  #curl
+            "libnettle6",  #curl
+            "libp11-kit0",  #curl
+            "libtasn1-6",  #curl
+            "libsasl2-2",  #curl
             "libcom-err2",
             "libonig5",  #mbstring
             "libsodium23",  #sodium
@@ -167,6 +187,7 @@ load(
             "libxslt1.1",  #xml
             "zlib1g",  #zlib
             "libzip4",  #zip
+            "libbz2-1.0",  #zip
             "libmcrypt4",  #mcrypt
             "libgd3",  #gd
             "libfontconfig1",  #gd
@@ -278,6 +299,7 @@ load(
         name = "php8_bundle_" + arch + "_debian10",
         packages = [
             "php8.0",
+            "php8.0-apcu",
             "php8.0-cli",
             "php8.0-common",
             "php8.0-curl",
@@ -285,6 +307,7 @@ load(
             "php8.0-fpm",
             "php8.0-gd",
             "php8.0-intl",
+            # "php8.0-json", # only for php7.4
             "php8.0-mbstring",
             "php8.0-mcrypt",
             "php8.0-mysql",
@@ -304,9 +327,6 @@ load(
     dpkg_list(
         name = "php8plus_bundle_" + arch + "_debian10",
         packages = [
-            "php8.0-apcu",
-            "php8.0-igbinary",
-            "php8.0-redis",
             "php8.0-xdebug",
         ],
         sources = [

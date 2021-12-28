@@ -2,13 +2,13 @@
 PHP_VERSION = "8.0"
 
 PHP_EXT = {
-    "calendar": {
-        "prio": "20",
-        "path": "/usr/share/php" + PHP_VERSION + "-common/common/calendar.ini",
-    },
     "ctype": {
         "prio": "20",
         "path": "/usr/share/php" + PHP_VERSION + "-common/common/ctype.ini",
+    },
+    "curl": {
+        "prio": "20",
+        "path": "/usr/share/php" + PHP_VERSION + "-curl/curl/curl.ini",
     },
     "dom": {
         "prio": "20",
@@ -30,13 +30,13 @@ PHP_EXT = {
         "prio": "20",
         "path": "/usr/share/php" + PHP_VERSION + "-gd/gd/gd.ini",
     },
-    "gettext": {
-        "prio": "20",
-        "path": "/usr/share/php" + PHP_VERSION + "-common/common/gettext.ini",
-    },
     "iconv": {
         "prio": "20",
         "path": "/usr/share/php" + PHP_VERSION + "-common/common/iconv.ini",
+    },
+    "intl": {
+        "prio": "20",
+        "path": "/usr/share/php" + PHP_VERSION + "-intl/intl/intl.ini",
     },
     "json": {
         "prio": "20",
@@ -74,37 +74,13 @@ PHP_EXT = {
         "prio": "20",
         "path": "/usr/share/php" + PHP_VERSION + "-readline/readline/readline.ini",
     },
-    "shmop": {
-        "prio": "20",
-        "path": "/usr/share/php" + PHP_VERSION + "-common/common/shmop.ini",
-    },
     "simplexml": {
         "prio": "20",
         "path": "/usr/share/php" + PHP_VERSION + "-xml/xml/simplexml.ini",
     },
-    "sockets": {
-        "prio": "20",
-        "path": "/usr/share/php" + PHP_VERSION + "-common/common/sockets.ini",
-    },
-    "sysvmsg": {
-        "prio": "20",
-        "path": "/usr/share/php" + PHP_VERSION + "-common/common/sysvmsg.ini",
-    },
-    "sysvsem": {
-        "prio": "20",
-        "path": "/usr/share/php" + PHP_VERSION + "-common/common/sysvsem.ini",
-    },
-    "sysvshm": {
-        "prio": "20",
-        "path": "/usr/share/php" + PHP_VERSION + "-common/common/sysvshm.ini",
-    },
     "tokenizer": {
         "prio": "20",
         "path": "/usr/share/php" + PHP_VERSION + "-common/common/tokenizer.ini",
-    },
-    "wddx": {
-        "prio": "20",
-        "path": "/usr/share/php" + PHP_VERSION + "-xml/xml/wddx.ini",
     },
     "xml": {
         "prio": "15",
@@ -118,9 +94,13 @@ PHP_EXT = {
         "prio": "20",
         "path": "/usr/share/php" + PHP_VERSION + "-xml/xml/xmlwriter.ini",
     },
-    "xsl": {
+    "zip": {
         "prio": "20",
-        "path": "/usr/share/php" + PHP_VERSION + "-xml/xml/xsl.ini",
+        "path": "/usr/share/php" + PHP_VERSION + "-zip/zip/zip.ini",
+    },
+    "apcu": {
+        "prio": "20",
+        "path": "/etc/php/" + PHP_VERSION + "/mods-available/apcu.ini",
     },
 }
 
