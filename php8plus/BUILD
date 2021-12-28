@@ -10,12 +10,15 @@ load("//php8:php-extensions.bzl", "php_extensions")
 
 PHP_VERSION = "8.0"
 
+EXCLUDED_DEBS = [
+]
+
 [
     container_image(
         name = ("php8plus" if (not mode) else mode[1:]) + "_" + user + "_" + arch + distro_suffix,
         architecture = arch,
         base = "//php8" + (mode if mode else ":php8") + "_" + user + "_" + arch + distro_suffix,
-        debs = extract_dependencies(extra_packages),
+        debs = extract_dependencies(extra_packages, EXCLUDED_DEBS),
         symlinks = dict(php_extensions(PHP_EXT, PHP_VERSION).items()),
     )
     for mode in [
