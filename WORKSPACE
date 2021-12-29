@@ -87,7 +87,7 @@ load(
         arch = arch,
         distro = distro,
         package_prefix = "https://packages.sury.org/php/",
-        packages_gz_url = "https://packages.sury.org/php/dists/{}/main/binary-{}/Packages.gz".format(distro, arch),
+        packages_url = "https://packages.sury.org/php/dists/{}/main/binary-{}/Packages.gz".format(distro, arch),
         sha256 = PHP_DISTRO_SHA256s[arch][name]["sury-php"],
     )
     for arch in PHP_DISTRO_ARCHITECTURES

@@ -6,8 +6,16 @@ set -o xtrace
 cp php-checksums.bzl php-checksums.bzl~
 cp php_package_bundle_amd64_debian10.versions php_package_bundle_amd64_debian10.versions~
 cp php_package_bundle_arm64_debian10.versions php_package_bundle_arm64_debian10.versions~
+cp php_package_bundle_amd64_debian11.versions php_package_bundle_amd64_debian11.versions~
+cp php_package_bundle_arm64_debian11.versions php_package_bundle_arm64_debian11.versions~
 cp php8_bundle_amd64_debian10.versions php8_bundle_amd64_debian10.versions~
+cp php8_bundle_arm64_debian10.versions php8_bundle_arm64_debian10.versions~
+cp php8_bundle_amd64_debian11.versions php8_bundle_amd64_debian11.versions~
+cp php8_bundle_arm64_debian11.versions php8_bundle_arm64_debian11.versions~
 cp php8plus_bundle_amd64_debian10.versions php8plus_bundle_amd64_debian10.versions~
+cp php8plus_bundle_arm64_debian10.versions php8plus_bundle_arm64_debian10.versions~
+cp php8plus_bundle_amd64_debian11.versions php8plus_bundle_amd64_debian11.versions~
+cp php8plus_bundle_arm64_debian11.versions php8plus_bundle_arm64_debian11.versions~
 
 YEAR=`date +"%Y"`
 MONTH=`date +"%m"`
@@ -47,6 +55,7 @@ PHP_DISTRO_ARCHITECTURES = PHP_DISTRO_BASE_ARCHITECTURES
 
 PHP_DISTRO_VERSIONS = [
     ("debian10", "buster"),
+    ("debian11", "bullseye"),
 ]
 
 PHP_DISTRO_DEBIAN_SNAPSHOT = "$PHP_DISTRO_DEBIAN_SNAPSHOT"
@@ -61,6 +70,12 @@ PHP_DISTRO_SHA256s = {
             "security": "`curl -s https://snapshot.debian.org/archive/debian-security/$DEBIAN_SECURITY_SNAPSHOT/dists/buster/updates/main/binary-amd64/Packages.gz 2>&1 | sha256sum | cut -d " " -f 1`",
             "sury-php": "`curl -H "User-Agent: Mozilla/5.0" -s https://packages.sury.org/php/dists/buster/main/binary-amd64/Packages.gz 2>&1 | sha256sum | cut -d " " -f 1`",
         },
+        "debian11": {
+            "main": "`curl -s https://snapshot.debian.org/archive/debian/$DEBIAN_SNAPSHOT/dists/bullseye/main/binary-amd64/Packages.xz 2>&1 | sha256sum | cut -d " " -f 1`",
+            "updates": "`curl -s https://snapshot.debian.org/archive/debian/$DEBIAN_SNAPSHOT/dists/bullseye-updates/main/binary-amd64/Packages.xz 2>&1 | sha256sum | cut -d " " -f 1`",
+            "security": "`curl -s https://snapshot.debian.org/archive/debian-security/$DEBIAN_SECURITY_SNAPSHOT/dists/bullseye-security/main/binary-amd64/Packages.xz 2>&1 | sha256sum | cut -d " " -f 1`",
+            "sury-php": "`curl -H "User-Agent: Mozilla/5.0" -s https://packages.sury.org/php/dists/bullseye/main/binary-amd64/Packages.gz 2>&1 | sha256sum | cut -d " " -f 1`",
+        },
     },
     "arm64": {
         "debian10": {
@@ -68,6 +83,12 @@ PHP_DISTRO_SHA256s = {
             "updates": "`curl -s https://snapshot.debian.org/archive/debian/$DEBIAN_SNAPSHOT/dists/buster-updates/main/binary-arm64/Packages.gz 2>&1 | sha256sum | cut -d " " -f 1`",
             "security": "`curl -s https://snapshot.debian.org/archive/debian-security/$DEBIAN_SECURITY_SNAPSHOT/dists/buster/updates/main/binary-arm64/Packages.gz 2>&1 | sha256sum | cut -d " " -f 1`",
             "sury-php": "`curl -H "User-Agent: Mozilla/5.0" -s https://packages.sury.org/php/dists/buster/main/binary-arm64/Packages.gz 2>&1 | sha256sum | cut -d " " -f 1`",
+        },
+        "debian11": {
+            "main": "`curl -s https://snapshot.debian.org/archive/debian/$DEBIAN_SNAPSHOT/dists/bullseye/main/binary-arm64/Packages.xz 2>&1 | sha256sum | cut -d " " -f 1`",
+            "updates": "`curl -s https://snapshot.debian.org/archive/debian/$DEBIAN_SNAPSHOT/dists/bullseye-updates/main/binary-arm64/Packages.xz 2>&1 | sha256sum | cut -d " " -f 1`",
+            "security": "`curl -s https://snapshot.debian.org/archive/debian-security/$DEBIAN_SECURITY_SNAPSHOT/dists/bullseye-security/main/binary-arm64/Packages.xz 2>&1 | sha256sum | cut -d " " -f 1`",
+            "sury-php": "`curl -H "User-Agent: Mozilla/5.0" -s https://packages.sury.org/php/dists/bullseye/main/binary-arm64/Packages.gz 2>&1 | sha256sum | cut -d " " -f 1`",
         },
     },
 }
@@ -78,22 +99,50 @@ bazel clean
 bazel build //package_manager:dpkg_parser.par
 bazel build @php_package_bundle_amd64_debian10//file:packages.bzl
 bazel build @php_package_bundle_arm64_debian10//file:packages.bzl
+bazel build @php_package_bundle_amd64_debian11//file:packages.bzl
+bazel build @php_package_bundle_arm64_debian11//file:packages.bzl
 
 bazel build @php8_bundle_amd64_debian10//file:packages.bzl
+bazel build @php8_bundle_arm64_debian10//file:packages.bzl
+bazel build @php8_bundle_amd64_debian11//file:packages.bzl
+bazel build @php8_bundle_arm64_debian11//file:packages.bzl
+
 bazel build @php8plus_bundle_amd64_debian10//file:packages.bzl
+bazel build @php8plus_bundle_arm64_debian10//file:packages.bzl
+bazel build @php8plus_bundle_amd64_debian11//file:packages.bzl
+bazel build @php8plus_bundle_arm64_debian11//file:packages.bzl
+
 
 # Check if any of the version lock files are updated
 
 if diff -w php_package_bundle_amd64_debian10.versions php_package_bundle_amd64_debian10.versions~ &&
   diff -w php_package_bundle_arm64_debian10.versions php_package_bundle_arm64_debian10.versions~ &&
-  diff -w php8plus_bundle_amd64_debian10.versions php8plus_bundle_amd64_debian10.versions~ &&
-	diff -w php8_bundle_amd64_debian10.versions php8_bundle_amd64_debian10.versions~ ; then
+  diff -w php_package_bundle_amd64_debian11.versions php_package_bundle_amd64_debian11.versions~ &&
+  diff -w php_package_bundle_arm64_debian11.versions php_package_bundle_arm64_debian11.versions~ &&
+
+  diff -w php8_bundle_amd64_debian10.versions php8_bundle_amd64_debian1.versions~ &&
+  diff -w php8_bundle_arm64_debian10.versions php8_bundle_arm64_debian10.versions~ &&
+  diff -w php8_bundle_amd64_debian11.versions php8_bundle_amd64_debian11.versions~ &&
+  diff -w php8_bundle_arm64_debian11.versions php8_bundle_arm64_debian11.versions~ &&
+
+  diff -w php8plus_bundle_amd64_debian10.versions php8plus_bundle_amd64_debian1.versions~ &&
+  diff -w php8plus_bundle_arm64_debian10.versions php8plus_bundle_arm64_debian10.versions~ &&
+  diff -w php8plus_bundle_amd64_debian11.versions php8plus_bundle_amd64_debian11.versions~ &&
+  diff -w php8plus_bundle_arm64_debian11.versions php8plus_bundle_arm64_debian11.versions~ ; then
     echo "No changes detected to php_package_bundle versions."
     mv php-checksums.bzl~ php-checksums.bzl
     mv php_package_bundle_amd64_debian10.versions~ php_package_bundle_amd64_debian10.versions
     mv php_package_bundle_arm64_debian10.versions~ php_package_bundle_arm64_debian10.versions
-    mv php8plus_bundle_amd64_debian10.versions~ php8plus_bundle_amd64_debian10.versions
-    mv php8_bundle_amd64_debian10.versions~ php8_bundle_amd64_debian10.versions
+    mv php_package_bundle_amd64_debian11.versions~ php_package_bundle_amd64_debian11.versions
+    mv php_package_bundle_arm64_debian11.versions~ php_package_bundle_arm64_debian11.versions
+    mv php8_bundle_amd64_debian1.versions~ php8_bundle_amd64_debian10.versions
+    mv php8_bundle_arm64_debian10.versions~ php8_bundle_arm64_debian10.versions
+    mv php8_bundle_amd64_debian11.versions~ php8_bundle_amd64_debian11.versions
+    mv php8_bundle_arm64_debian11.versions~ php8_bundle_arm64_debian11.versions
+    mv php8plus_bundle_amd64_debian1.versions~ php8plus_bundle_amd64_debian10.versions
+    mv php8plus_bundle_arm64_debian10.versions~ php8plus_bundle_arm64_debian10.versions
+    mv php8plus_bundle_amd64_debian11.versions~ php8plus_bundle_amd64_debian11.versions
+    mv php8plus_bundle_arm64_debian11.versions~ php8plus_bundle_arm64_debian11.versions
 else
     echo "Changes detected to php_package_bundle version files. Please update snapshots."
     rm *~
