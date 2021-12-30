@@ -7,25 +7,26 @@ load("@io_bazel_rules_docker//contrib:passwd.bzl", "passwd_entry", "passwd_file"
 load("@io_bazel_rules_docker//contrib:group.bzl", "group_entry", "group_file")
 load("@php8_bundle_amd64_debian10//file:packages.bzl", "packages")
 load("//base:distro.bzl", "DISTRO_SUFFIXES")
-load("//cc_php:extract_dependencies.bzl", "extract_dependencies")
-load("//:checksums.bzl", "ARCHITECTURES")
-load(":php_paths.bzl", "PHP_EXT", "PHP_LINKS")
+load(":php_paths.bzl", "php_binary", "php_config")
 load(":php-extensions.bzl", "php_extensions")
-
-PHP_VERSION = "8.0"
+load("//:php-checksums.bzl", "PHP_DISTRO_BASE_ARCHITECTURES", "PHP_VERSIONS")
+load(":php_version_dependencies.bzl", "php_version_dependencies")
 
 # www-data user UID
 WWW_DATA = 33
 
-container_layer(
-    name = "php_dirs",
-    empty_dirs = [
-        "/run/php",
-        "/srv/sylius",
-        "/var/lib/php/modules/" + PHP_VERSION + "/registry",
-    ],
-    mode = "755",
-)
+[
+    container_layer(
+        name = "php" + php_version + "_dirs",
+        empty_dirs = [
+            "/run/php",
+            "/srv/sylius",
+            "/var/lib/php/modules/" + php_version + "/registry",
+        ],
+        mode = "755",
+    )
+    for php_version in PHP_VERSIONS
+]
 
 container_layer(
     name = "php_sessions",
@@ -79,48 +80,63 @@ pkg_tar(
     package_dir = "etc",
 )
 
-pkg_tar(
-    name = "php_fpm_www_pool",
-    srcs = ["conf/zz-www.conf"],
-    mode = "0644",
-    package_dir = "etc/php/" + PHP_VERSION + "/fpm/pool.d/",
-)
+[
+    pkg_tar(
+        name = "php" + php_version + "_fpm_www_pool",
+        srcs = ["conf/zz-www.conf"],
+        mode = "0644",
+        package_dir = "etc/php/" + php_version + "/fpm/pool.d/",
+    )
+    for php_version in PHP_VERSIONS
+]
 
 [
     container_image(
-        name = ("php8" if (not mode) else mode[1:]) + "_" + user + "_" + arch + distro_suffix,
+        name = "php" + php_version + ("" if (not mode) else mode) + "_" + user + "_" + arch + distro_suffix,
         architecture = arch,
-        base = "//cc_php" + (mode if mode else ":cc_php") + "_" + user + "_" + arch + distro_suffix,
-        debs = extract_dependencies(packages),
+        base = ("//cc_php:cc_php" if (not ("debug" in mode)) else "//cc_php:debug") + "_" + user + "_" + arch + distro_suffix,
+        debs = php_version_dependencies(packages, php_version),
         entrypoint = [
             "/usr/sbin/php-fpm",
             "-F",
             "-O",
         ],
-        env = {"LANG": "C.UTF-8"},
+        env = {
+            "LANG": "C.UTF-8",
+            "PHP_VERSION": php_version,
+            "ARCHITECTURE": arch,
+            "distro": distro_suffix + "- distroless",
+        },
         layers = [
-            "php_dirs",
+            "php" + php_version + "_dirs",
             "php_sessions",
         ],
         ports = ["9000"],
-        symlinks = dict(php_extensions(PHP_EXT, PHP_VERSION).items() + PHP_LINKS.items()),
+        symlinks = dict(
+            php_extensions(
+                php_config(php_version),
+                php_version,
+            ).items() +
+            php_binary(php_version).items(),
+        ),
         tars = [
             ":passwd_tar",
             ":group_tar",
-            ":php_fpm_www_pool",
+            ":php" + php_version + "_fpm_www_pool",
         ],
         workdir = "/srv/sylius",
     )
     for mode in [
         "",
-        ":debug",
+        "_debug",
     ]
-    for arch in ARCHITECTURES
+    for arch in PHP_DISTRO_BASE_ARCHITECTURES
     for user in [
         "root",
         "nonroot",
     ]
     for distro_suffix in DISTRO_SUFFIXES
+    for php_version in PHP_VERSIONS
 ]
 
 container_test(
