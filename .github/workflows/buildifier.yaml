@@ -1,6 +1,7 @@
 name: Buildifier
 
 on:
+  workflow_dispatch: # Allow manual runs.
   pull_request:
     branches: [ 'main' ]
 
