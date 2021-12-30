@@ -263,6 +263,25 @@ JETTY = {
     "{REGISTRY}/{PROJECT_ID}/java-debian11/jetty:java11-debug": "//java/jetty:jetty_java11_debug_debian11",
 }
 
+PHP = {
+    "{REGISTRY}/{PROJECT_ID}:7.4_debug_nonroot_amd64_debian10_distroless": "//php8:php7.4_debug_nonroot_amd64_debian10",
+    "{REGISTRY}/{PROJECT_ID}:7.4_debug_root_amd64_debian10_distroless": "//php8:php7.4_debug_root_amd64_debian10",
+    "{REGISTRY}/{PROJECT_ID}:7.4_nonroot_amd64_debian10_distroless": "//php8:php7.4_nonroot_amd64_debian10",
+    "{REGISTRY}/{PROJECT_ID}:7.4_root_amd64_debian10_distroless": "//php8:php7.4_root_amd64_debian10",
+    "{REGISTRY}/{PROJECT_ID}:8.0_debug_nonroot_amd64_debian10_distroless": "//php8:php8.0_debug_nonroot_amd64_debian10",
+    "{REGISTRY}/{PROJECT_ID}:8.0_debug_root_amd64_debian10_distroless": "//php8:php8.0_debug_root_amd64_debian10",
+    "{REGISTRY}/{PROJECT_ID}:8.0_nonroot_amd64_debian10_distroless": "//php8:php8.0_nonroot_amd64_debian10",
+    "{REGISTRY}/{PROJECT_ID}:8.0_root_amd64_debian10_distroless": "//php8:php8.0_root_amd64_debian10",
+    "{REGISTRY}/{PROJECT_ID}:8.1_debug_nonroot_amd64_debian10_distroless": "//php8:php8.1_debug_nonroot_amd64_debian10",
+    "{REGISTRY}/{PROJECT_ID}:8.1_debug_root_amd64_debian10_distroless": "//php8:php8.1_debug_root_amd64_debian10",
+    "{REGISTRY}/{PROJECT_ID}:8.1_nonroot_amd64_debian10_distroless": "//php8:php8.1_nonroot_amd64_debian10",
+    "{REGISTRY}/{PROJECT_ID}:8.1_root_amd64_debian10_distroless": "//php8:php8.1_root_amd64_debian10",
+}
+
+ALL_PHP = {}
+
+ALL_PHP.update(PHP)
+
 ALL = {}
 
 ALL.update(STATIC)
@@ -290,6 +309,11 @@ container_bundle(
     images = ALL,
 )
 
+container_bundle(
+    name = "all_php",
+    images = ALL_PHP,
+)
+
 load("@io_bazel_rules_docker//contrib:push-all.bzl", "container_push")
 
 container_push(
@@ -299,5 +323,12 @@ container_push(
     # Push images sequentially, to avoid a bug in rules_docker related to
     # pushing many images in parallel.
     # https://github.com/bazelbuild/rules_docker/issues/525
+    sequential = True,
+)
+
+container_push(
+    name = "publish_php",
+    bundle = ":all_php",
+    format = "Docker",
     sequential = True,
 )
