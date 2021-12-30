@@ -1,13 +1,56 @@
 schemaVersion: "1.0.0"
 fileExistenceTests:
-  - name: php-fpm
+  - name: php-fpm symlink
     path: '/usr/sbin/php-fpm'
     shouldExist: true
 commandTests:
-  - name: fpm-version
+  - name: php-fpm version
     command: [ "/usr/sbin/php-fpm", "--version" ]
     expectedOutput: ["PHP 8.0"]
-  - name: version
+  - name: php-fpm-modules
+    command: [ "/usr/sbin/php-fpm", "-m" ]
+    expectedOutput:
+      - 'apcu'
+      - 'cgi-fcgi'
+      - 'Core'
+      - 'ctype'
+      - 'curl'
+      - 'date'
+      - 'dom'
+      - 'exif'
+      - 'fileinfo'
+      - 'filter'
+      - 'ftp'
+      - 'gd'
+      - 'hash'
+      - 'iconv'
+      - 'intl'
+      - 'json'
+      - 'libxml'
+      - 'mbstring'
+      - 'mysqlnd'
+      - 'openssl'
+      - 'pcre'
+      - 'PDO'
+      - 'pdo_mysql'
+      - 'Phar'
+      - 'posix'
+      - 'readline'
+      - 'Reflection'
+      - 'session'
+      - 'SimpleXML'
+      - 'sodium'
+      - 'SPL'
+      - 'standard'
+      - 'tokenizer'
+      - 'xml'
+      - 'xmlreader'
+      - 'xmlwriter'
+      - 'Zend OPcache'
+      - 'zip'
+      - 'zlib'
+
+  - name: php-cli version
     command: ["/usr/bin/php", "--version"]
     expectedOutput: ["PHP 8.0"]
   - name: config-files
@@ -37,7 +80,7 @@ commandTests:
       - '/etc/php/8.0/cli/conf.d/20-xmlreader.ini,'
       - '/etc/php/8.0/cli/conf.d/20-xmlwriter.ini,'
       - '/etc/php/8.0/cli/conf.d/20-zip.ini'
-  - name: extensions
+  - name: php-cli extensions
     command: ["/usr/bin/php", "-m"]
     expectedOutput:
       - 'apcu'

@@ -139,9 +139,12 @@ pkg_tar(
     for php_version in PHP_VERSIONS
 ]
 
-container_test(
-    name = "php-fpm_test",
-    size = "medium",
-    configs = ["testdata/debian10.yaml"],
-    image = ":php8_root_amd64_debian10",
-)
+[
+    container_test(
+        name = "php" + php_version + "-fpm_test",
+        size = "medium",
+        configs = ["testdata/php" + php_version + "_debian10.yaml"],
+        image = ":php" + php_version + "_root_amd64_debian10",
+    )
+    for php_version in PHP_VERSIONS
+]
