@@ -6,16 +6,10 @@ set -o xtrace
 cp php-checksums.bzl php-checksums.bzl~
 cp php_package_bundle_amd64_debian10.versions php_package_bundle_amd64_debian10.versions~
 cp php_package_bundle_arm64_debian10.versions php_package_bundle_arm64_debian10.versions~
-cp php_package_bundle_amd64_debian11.versions php_package_bundle_amd64_debian11.versions~
-cp php_package_bundle_arm64_debian11.versions php_package_bundle_arm64_debian11.versions~
 cp php8_bundle_amd64_debian10.versions php8_bundle_amd64_debian10.versions~
 cp php8_bundle_arm64_debian10.versions php8_bundle_arm64_debian10.versions~
-cp php8_bundle_amd64_debian11.versions php8_bundle_amd64_debian11.versions~
-cp php8_bundle_arm64_debian11.versions php8_bundle_arm64_debian11.versions~
 cp php8plus_bundle_amd64_debian10.versions php8plus_bundle_amd64_debian10.versions~
 cp php8plus_bundle_arm64_debian10.versions php8plus_bundle_arm64_debian10.versions~
-cp php8plus_bundle_amd64_debian11.versions php8plus_bundle_amd64_debian11.versions~
-cp php8plus_bundle_arm64_debian11.versions php8plus_bundle_arm64_debian11.versions~
 
 YEAR=`date +"%Y"`
 MONTH=`date +"%m"`
@@ -43,6 +37,7 @@ cat > php-checksums.bzl <<EOF
 # TO GENERATE THIS RUN: ./updateWorkspaceSnapshotsForPHP.sh
 
 PHP_DISTRO_BASE_ARCHITECTURES = ["amd64", "arm64"]
+PHP_VERSIONS = ["7.4", "8.0", "8.1"]
 
 # Exceptions:
 # - s390x doesn't have libunwind8.
@@ -55,7 +50,7 @@ PHP_DISTRO_ARCHITECTURES = PHP_DISTRO_BASE_ARCHITECTURES
 
 PHP_DISTRO_VERSIONS = [
     ("debian10", "buster"),
-    ("debian11", "bullseye"),
+#    ("debian11", "bullseye"),
 ]
 
 PHP_DISTRO_DEBIAN_SNAPSHOT = "$PHP_DISTRO_DEBIAN_SNAPSHOT"
@@ -99,50 +94,32 @@ bazel clean
 bazel build //package_manager:dpkg_parser.par
 bazel build @php_package_bundle_amd64_debian10//file:packages.bzl
 bazel build @php_package_bundle_arm64_debian10//file:packages.bzl
-bazel build @php_package_bundle_amd64_debian11//file:packages.bzl
-bazel build @php_package_bundle_arm64_debian11//file:packages.bzl
 
 bazel build @php8_bundle_amd64_debian10//file:packages.bzl
 bazel build @php8_bundle_arm64_debian10//file:packages.bzl
-bazel build @php8_bundle_amd64_debian11//file:packages.bzl
-bazel build @php8_bundle_arm64_debian11//file:packages.bzl
 
 bazel build @php8plus_bundle_amd64_debian10//file:packages.bzl
 bazel build @php8plus_bundle_arm64_debian10//file:packages.bzl
-bazel build @php8plus_bundle_amd64_debian11//file:packages.bzl
-bazel build @php8plus_bundle_arm64_debian11//file:packages.bzl
 
 
 # Check if any of the version lock files are updated
 
 if diff -w php_package_bundle_amd64_debian10.versions php_package_bundle_amd64_debian10.versions~ &&
   diff -w php_package_bundle_arm64_debian10.versions php_package_bundle_arm64_debian10.versions~ &&
-  diff -w php_package_bundle_amd64_debian11.versions php_package_bundle_amd64_debian11.versions~ &&
-  diff -w php_package_bundle_arm64_debian11.versions php_package_bundle_arm64_debian11.versions~ &&
 
   diff -w php8_bundle_amd64_debian10.versions php8_bundle_amd64_debian1.versions~ &&
   diff -w php8_bundle_arm64_debian10.versions php8_bundle_arm64_debian10.versions~ &&
-  diff -w php8_bundle_amd64_debian11.versions php8_bundle_amd64_debian11.versions~ &&
-  diff -w php8_bundle_arm64_debian11.versions php8_bundle_arm64_debian11.versions~ &&
 
   diff -w php8plus_bundle_amd64_debian10.versions php8plus_bundle_amd64_debian1.versions~ &&
-  diff -w php8plus_bundle_arm64_debian10.versions php8plus_bundle_arm64_debian10.versions~ &&
-  diff -w php8plus_bundle_amd64_debian11.versions php8plus_bundle_amd64_debian11.versions~ &&
-  diff -w php8plus_bundle_arm64_debian11.versions php8plus_bundle_arm64_debian11.versions~ ; then
+  diff -w php8plus_bundle_arm64_debian10.versions php8plus_bundle_arm64_debian10.versions~  ; then
     echo "No changes detected to php_package_bundle versions."
     mv php-checksums.bzl~ php-checksums.bzl
     mv php_package_bundle_amd64_debian10.versions~ php_package_bundle_amd64_debian10.versions
     mv php_package_bundle_arm64_debian10.versions~ php_package_bundle_arm64_debian10.versions
-    mv php_package_bundle_amd64_debian11.versions~ php_package_bundle_amd64_debian11.versions
-    mv php_package_bundle_arm64_debian11.versions~ php_package_bundle_arm64_debian11.versions
-    mv php8_bundle_amd64_debian1.versions~ php8_bundle_amd64_debian10.versions
+    mv php8_bundle_amd64_debian10.versions~ php8_bundle_amd64_debian10.versions
     mv php8_bundle_arm64_debian10.versions~ php8_bundle_arm64_debian10.versions
-    mv php8_bundle_amd64_debian11.versions~ php8_bundle_amd64_debian11.versions
-    mv php8_bundle_arm64_debian11.versions~ php8_bundle_arm64_debian11.versions
-    mv php8plus_bundle_amd64_debian1.versions~ php8plus_bundle_amd64_debian10.versions
+    mv php8plus_bundle_amd64_debian10.versions~ php8plus_bundle_amd64_debian10.versions
     mv php8plus_bundle_arm64_debian10.versions~ php8plus_bundle_arm64_debian10.versions
-    mv php8plus_bundle_amd64_debian11.versions~ php8plus_bundle_amd64_debian11.versions
-    mv php8plus_bundle_arm64_debian11.versions~ php8plus_bundle_arm64_debian11.versions
 else
     echo "Changes detected to php_package_bundle version files. Please update snapshots."
     rm *~
