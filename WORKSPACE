@@ -53,7 +53,10 @@ load(
     "PHP_DISTRO_DEBIAN_SNAPSHOT",
     "PHP_DISTRO_SHA256s",
     "PHP_DISTRO_VERSIONS",
+    "PHP_VERSIONS",
 )
+load("//php8:php_matrix.bzl", "php_matrix")
+load("//php8:php_module_matrix.bzl", "php_module_matrix")
 
 [
     dpkg_src(
@@ -64,7 +67,7 @@ load(
         snapshot = DEBIAN_SNAPSHOT,
         url = "https://snapshot.debian.org/archive",
     )
-    for arch in ARCHITECTURES
+    for arch in PHP_DISTRO_BASE_ARCHITECTURES
     for (name, distro) in VERSIONS
 ]
 
@@ -77,7 +80,7 @@ load(
         snapshot = DEBIAN_SNAPSHOT,
         url = "https://snapshot.debian.org/archive",
     )
-    for arch in ARCHITECTURES
+    for arch in PHP_DISTRO_ARCHITECTURES
     for (name, distro) in VERSIONS
 ]
 
@@ -101,7 +104,7 @@ load(
         packages_url = "https://snapshot.debian.org/archive/debian-security/{}/dists/{}/updates/main/binary-{}/Packages.xz".format(DEBIAN_SECURITY_SNAPSHOT, distro, arch),
         sha256 = SHA256s[arch][name]["security"],
     )
-    for arch in ARCHITECTURES
+    for arch in PHP_DISTRO_ARCHITECTURES
     for (name, distro) in VERSIONS
     if "debian10" == name
     if "security" in SHA256s[arch][name]
@@ -115,7 +118,7 @@ load(
         packages_url = "https://snapshot.debian.org/archive/debian-security/{}/dists/{}-security/main/binary-{}/Packages.xz".format(DEBIAN_SECURITY_SNAPSHOT, distro, arch),
         sha256 = SHA256s[arch][name]["security"],
     )
-    for arch in ARCHITECTURES
+    for arch in PHP_DISTRO_ARCHITECTURES
     for (name, distro) in VERSIONS
     if "debian11" == name
     if "security" in SHA256s[arch][name]
@@ -130,7 +133,7 @@ load(
         snapshot = DEBIAN_SNAPSHOT,
         url = "https://snapshot.debian.org/archive",
     )
-    for arch in ARCHITECTURES
+    for arch in PHP_DISTRO_ARCHITECTURES
     for (name, distro) in VERSIONS
     if "backports" in SHA256s[arch][name]
 ]
@@ -216,7 +219,7 @@ load(
             "@" + arch + "_debian10//file:Packages.json",
         ],
     )
-    for arch in ARCHITECTURES
+    for arch in PHP_DISTRO_ARCHITECTURES
 ]
 
 [
@@ -291,49 +294,60 @@ load(
             "@" + arch + "_debian11//file:Packages.json",
         ],
     )
-    for arch in ARCHITECTURES
+    for arch in PHP_DISTRO_ARCHITECTURES
 ]
 
 [
     dpkg_list(
-        name = "php8_bundle_" + arch + "_debian10",
-        packages = [
-            "php8.0",
-            "php8.0-apcu",
-            "php8.0-cli",
-            "php8.0-common",
-            "php8.0-curl",
-            "php8.0-dev",
-            "php8.0-fpm",
-            "php8.0-gd",
-            "php8.0-intl",
-            # "php8.0-json", # only for php7.4
-            "php8.0-mbstring",
-            "php8.0-mcrypt",
-            "php8.0-mysql",
-            "php8.0-opcache",
-            "php8.0-readline",
-            "php8.0-xml",
-            "php8.0-zip",
-        ],
+        name = "php8_bundle_" + arch + "_" + name,
+        packages =
+            php_matrix(PHP_VERSIONS) +
+            php_module_matrix(
+                PHP_VERSIONS,
+                [
+                    "apcu",
+                    "cli",
+                    "apcu",
+                    "cli",
+                    "common",
+                    "curl",
+                    "dev",
+                    "fpm",
+                    "gd",
+                    "intl",
+                    "mbstring",
+                    "mcrypt",
+                    "mysql",
+                    "opcache",
+                    "readline",
+                    "xml",
+                    "zip",
+                ],
+            ),
         sources = [
             "@" + arch + "_debian10_sury-php//file:Packages.json",
         ],
     )
-    for arch in ARCHITECTURES
+    for arch in PHP_DISTRO_ARCHITECTURES
+    for (name, distro) in PHP_DISTRO_VERSIONS
 ]
 
 [
     dpkg_list(
-        name = "php8plus_bundle_" + arch + "_debian10",
-        packages = [
-            "php8.0-xdebug",
-        ],
+        name = "php8plus_bundle_" + arch + "_" + name,
+        packages =
+            php_module_matrix(
+                PHP_VERSIONS,
+                [
+                    "xdebug",
+                ],
+            ),
         sources = [
             "@" + arch + "_debian10_sury-php//file:Packages.json",
         ],
     )
-    for arch in ARCHITECTURES
+    for arch in PHP_DISTRO_ARCHITECTURES
+    for (name, distro) in PHP_DISTRO_VERSIONS
 ]
 
 [
@@ -400,7 +414,7 @@ load(
             "@" + arch + "_debian10//file:Packages.json",
         ],
     )
-    for arch in ARCHITECTURES
+    for arch in PHP_DISTRO_ARCHITECTURES
 ]
 
 # For Jetty

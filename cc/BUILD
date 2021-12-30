@@ -3,6 +3,10 @@ package(default_visibility = ["//visibility:public"])
 load("//base:distro.bzl", "DISTRO_PACKAGES", "DISTRO_SUFFIXES")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 load("//:checksums.bzl", "ARCHITECTURES")
+load(
+    "//:php-checksums.bzl",
+    "PHP_DISTRO_ARCHITECTURES",
+)
 
 # distribution-specific deb dependencies
 DISTRO_DEBS = {
@@ -29,7 +33,7 @@ DISTRO_DEBS = {
         "",
         ":debug",
     ]
-    for arch in ARCHITECTURES
+    for arch in PHP_DISTRO_ARCHITECTURES
     for user in [
         "root",
         "nonroot",

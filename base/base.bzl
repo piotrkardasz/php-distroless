@@ -5,12 +5,16 @@ load(":distro.bzl", "DISTRO_PACKAGES", "DISTRO_REPOSITORY")
 load("//cacerts:cacerts.bzl", "cacerts")
 load("//:checksums.bzl", "ARCHITECTURES")
 load("@io_bazel_rules_go//go:def.bzl", "go_binary")
+load(
+    "//:php-checksums.bzl",
+    "PHP_DISTRO_ARCHITECTURES",
+)
 
 NONROOT = 65532
 
 # Replicate everything for all distroless suffixes
 def distro_components(distro_suffix):
-    for arch in ARCHITECTURES:
+    for arch in PHP_DISTRO_ARCHITECTURES:
         cacerts(
             name = "cacerts_" + arch + distro_suffix,
             deb = DISTRO_PACKAGES[arch][distro_suffix]["ca-certificates"],
