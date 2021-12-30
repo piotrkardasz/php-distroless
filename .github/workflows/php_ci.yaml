@@ -1,0 +1,52 @@
+name: PHP CI
+
+on:
+  workflow_dispatch: # Allow manual runs.
+  pull_request:
+    branches: [ 'main' ]
+  push:
+    branches: [ 'main' ]
+
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set output
+      id: vars
+      run: echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
+    - name: Docker Login
+      uses: docker/login-action@v1.10.0
+      with:
+        username: ${{ secrets.DOCKER_REPOSITORY_LOGIN }}
+        password: ${{ secrets.DOCKER_REPOSITORY_PASSWORD }}
+        logout: true
+
+    - name: Setup Bazel
+      uses: abhinavsingh/setup-bazel@1fe920bf5df3791aab606c06a3608f4bb600c4f2
+      with:
+        version: 4.2.1
+
+    - name: Mount bazel cache
+      uses: actions/cache@v2
+      with:
+        path: "~/.cache/bazel"
+        key: "bazel-${{ steps.vars.outputs.short_ref }}"
+
+    - name: Build and test
+      run: |
+        set -ex
+        bazel build --curses=no //package_manager:dpkg_parser.par
+        targets=$(bazel query 'attr(visibility, "//visibility:public", //php8:*)' | grep amd64_debian10 | sort)
+        bazel build --curses=no ${targets}
+        bazel test --curses=no --test_output=errors ${targets}
+
+    - name: Push
+      env:
+        PROJECT_ID: ${{ secrets.DOCKER_REPOSITORY_NAME }}
+        REGISTRY: ${{ secrets.DOCKER_REPOSITORY_LOGIN }}
+      run: |
+        bazel run //:publish_php
