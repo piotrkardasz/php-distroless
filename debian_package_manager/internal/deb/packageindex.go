@@ -20,6 +20,17 @@ import (
 )
 
 func PackageIndexGroup(snapshots *config.Snapshots, arch config.Arch, distro config.Distro) []*PackageIndex {
+	phpArchitectures := [2]string{"amd64", "arm64"}
+	for _, phpArchitecture := range phpArchitectures {
+		if phpArchitecture == arch.DebianName() {
+			return []*PackageIndex{
+				Main(snapshots.Debian, arch, distro),
+				Updates(snapshots.Debian, arch, distro),
+				Security(snapshots.Security, arch, distro),
+				Sury(arch, distro),
+			}
+		}
+	}
 	// special casing for missing security distros
 	if (arch == config.PPC64LE || arch == config.S390X) && distro == config.DEBIAN10 {
 		return []*PackageIndex{
