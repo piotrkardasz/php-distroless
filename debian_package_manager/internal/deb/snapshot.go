@@ -111,3 +111,13 @@ func Security(snapshot string, arch config.Arch, distro config.Distro) *PackageI
 		Channel:  "security",
 	}
 }
+
+func Sury(arch config.Arch, distro config.Distro) *PackageIndex {
+	return &PackageIndex{
+		URL:      fmt.Sprintf("https://packages.sury.org/php/dists/%s/main/binary-%s/Packages.gz", distro.Codename(), arch.DebianName()),
+		PoolRoot: "https://packages.sury.org/php/",
+		Snapshot: "",
+		Distro:   distro,
+		Arch:     arch,
+	}
+}
