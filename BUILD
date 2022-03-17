@@ -286,3 +286,39 @@ container_push(
     # https://github.com/bazelbuild/rules_docker/issues/525
     sequential = True,
 )
+
+load("//php:php_versions.bzl", "PHP_VERSIONS")
+
+PHP = {}
+
+PHP.update({
+    "{REGISTRY}/{PROJECT_ID}/php:" + php_version + "-" + tag_base + "-" + arch + "-" + distro: "//php:php" + php_version + "_" + label + "_" + arch + "_" + distro
+    for php_version in PHP_VERSIONS
+    for (tag_base, label) in [
+        ("root", "root"),
+        ("nonroot", "nonroot"),
+        ("debug", "debug_root"),
+        ("debug-nonroot", "debug_nonroot"),
+    ]
+    for distro in LANGUAGE_DISTROS
+    for arch in BASE_ARCHITECTURES
+})
+
+ALL_PHP = {}
+
+ALL_PHP.update(PHP)
+
+container_bundle(
+    name = "php_bundle",
+    images = ALL_PHP,
+)
+
+container_push(
+    name = "publish_php",
+    bundle = ":php_bundle",
+    format = "Docker",
+    # Push images sequentially, to avoid a bug in rules_docker related to
+    # pushing many images in parallel.
+    # https://github.com/bazelbuild/rules_docker/issues/525
+    sequential = True,
+)
