@@ -292,7 +292,7 @@ load("//php:php_versions.bzl", "PHP_VERSIONS")
 PHP = {}
 
 PHP.update({
-    "{REGISTRY}/{PROJECT_ID}/php:" + php_version + "-" + tag_base + "-" + arch + "-" + distro: "//php:php" + php_version + "_" + label + "_" + arch + "_" + distro
+    "{REGISTRY}/{REPOSITORY}/{PROJECT_ID}:" + php_version + "-" + tag_base + "-" + arch + "-" + distro: "//php:php" + php_version + "_" + label + "_" + arch + "_" + distro
     for php_version in PHP_VERSIONS
     for (tag_base, label) in [
         ("root", "root"),
