@@ -77,6 +77,10 @@ def php_config(php_version):
             "prio": "20",
             "path": "/usr/share/php" + php_version + "-xml/xml/simplexml.ini",
         },
+        "sockets": {
+            "prio": "20",
+            "path": "/usr/share/php" + php_version + "-common/common/sockets.ini",
+        },
         "tokenizer": {
             "prio": "20",
             "path": "/usr/share/php" + php_version + "-common/common/tokenizer.ini",
