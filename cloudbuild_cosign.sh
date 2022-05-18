@@ -38,6 +38,8 @@ done
 for distro_suffix in "" -debian11; do
   cosign sign "$@" gcr.io/$PROJECT_ID/nodejs${distro_suffix}:latest
   cosign sign "$@" gcr.io/$PROJECT_ID/nodejs${distro_suffix}:debug
+  cosign sign "$@" gcr.io/$PROJECT_ID/nodejs${distro_suffix}:18
+  cosign sign "$@" gcr.io/$PROJECT_ID/nodejs${distro_suffix}:18-debug
   cosign sign "$@" gcr.io/$PROJECT_ID/nodejs${distro_suffix}:16
   cosign sign "$@" gcr.io/$PROJECT_ID/nodejs${distro_suffix}:16-debug
 done
@@ -48,9 +50,3 @@ for java_version in -base 11 17; do
   cosign sign "$@" gcr.io/$PROJECT_ID/java${java_version}-debian11:debug
   cosign sign "$@" gcr.io/$PROJECT_ID/java${java_version}-debian11:debug-nonroot
 done
-
-# these java images tags are deprecated (remove march 31st 2022)
-cosign sign "$@" gcr.io/$PROJECT_ID/java-debian11:nonroot
-cosign sign "$@" gcr.io/$PROJECT_ID/java-debian11:latest
-cosign sign "$@" gcr.io/$PROJECT_ID/java-debian11:debug-nonroot
-cosign sign "$@" gcr.io/$PROJECT_ID/java-debian11:debug
