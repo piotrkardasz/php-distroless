@@ -71,6 +71,16 @@ def php_core_libs(arch, distro):
         "libjbig0",  #gd
         "libxau6",  #gd
         "libxdmcp6",  #gd
+        "libheif1",  #gd
+        "libavif9",  #gd
+        "libaom0",  #gd
+        "libde265-0",  #gd
+        "libx265-192",  #gd
+        "libdav1d4",  #gd
+        "libgav1-0",  #gd
+        "libnuma1",  #gd
+        "libabsl20200923",  #gd
+        "libatomic1",  #gd
         "libicu67",  #intl
         "ucf",
     ]
