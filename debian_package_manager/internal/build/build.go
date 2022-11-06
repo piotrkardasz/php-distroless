@@ -182,7 +182,6 @@ func Update(snapshotsFile string, packagesFile string, versionsFile string, arch
 		return err
 	case snapshot.Equivalent(latest):
 		fmt.Println("No new snapshots found.")
-		os.Exit(0)
 	default:
 		needUpdate, err := checkForUpdates(snapshot, latest, packages)
 		if err != nil {
