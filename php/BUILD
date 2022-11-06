@@ -3,6 +3,8 @@ package(default_visibility = ["//visibility:public"])
 load("@rules_pkg//:pkg.bzl", "pkg_tar")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image", "container_layer")
 load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
+load("@io_bazel_rules_docker//contrib:passwd.bzl", "passwd_entry", "passwd_file")
+load("@io_bazel_rules_docker//contrib:group.bzl", "group_entry", "group_file")
 load("//base:distro.bzl", DISTROS = "LANGUAGE_DISTROS")
 load("//base:base.bzl", "NONROOT", "deb_file")
 load("//:checksums.bzl", ARCHITECTURES = "BASE_ARCHITECTURES")
@@ -14,6 +16,61 @@ load(":php_version_dependencies.bzl", "php_version_dependencies")
 load(":php_versions.bzl", "PHP_VERSIONS")
 
 APP_DIR = "/var/www"
+
+WWW_DATA = 33
+
+passwd_entry(
+    name = "www-data_user",
+    gid = WWW_DATA,
+    home = "/www",
+    info = "www-data",
+    shell = "/sbin/nologin",
+    uid = WWW_DATA,
+    username = "www-data",
+)
+
+passwd_file(
+    name = "passwd",
+    entries = [
+        "//base:root_user",
+        "//base:nobody_user",
+        "//base:nonroot_user",
+        ":www-data_user",
+    ],
+)
+
+pkg_tar(
+    name = "passwd_tar",
+    srcs = [":passwd"],
+    mode = "0644",
+    package_dir = "etc",
+)
+
+group_entry(
+    name = "www-data_group",
+    gid = WWW_DATA,
+    groupname = "www-data",
+    users = ["www-data"],
+)
+
+group_file(
+    name = "group",
+    entries = [
+        "//base:root_group",
+        "//base:nobody_group",
+        "//base:tty_group",
+        "//base:staff_group",
+        "//base:nonroot_group",
+        ":www-data_group",
+    ],
+)
+
+pkg_tar(
+    name = "group_tar",
+    srcs = [":group"],
+    mode = "0644",
+    package_dir = "etc",
+)
 
 [
     pkg_tar(
@@ -127,6 +184,8 @@ container_layer(
             "manual",
         ],
         tars = [
+            ":passwd_tar",
+            ":group_tar",
             ":php" + php_version + "_fpm_www_pool",
             ":" + user + "_project_empty_dirs_tar",
         ],
